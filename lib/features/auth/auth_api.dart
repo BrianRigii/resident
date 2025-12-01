@@ -15,12 +15,42 @@ class AuthApiImpl extends AuthApi {
 
   @override
   Future<User> signIn(Map<String, dynamic> data) async {
-    throw UnimplementedError();
+    final response = await supabaseClient.auth.signInWithPassword(
+      email: data['email'],
+      password: data['password'],
+    );
+
+    if (response.session == null || response.user == null) {
+      throw Exception('Authentication failed');
+    }
+
+    final supabaseUser = response.user!;
+    return User(
+      id: supabaseUser.id,
+      email: supabaseUser.email ?? '',
+      name: supabaseUser.userMetadata?['full_name'] ?? '',
+      createdAt: DateTime.parse(supabaseUser.createdAt),
+    );
   }
 
   @override
   Future<User> signUp(Map<String, dynamic> data) async {
-    throw UnimplementedError();
+    final response = await supabaseClient.auth.signUp(
+      email: data['email'],
+      password: data['password'],
+    );
+
+    if (response.user == null) {
+      throw Exception('Sign up failed');
+    }
+
+    final supabaseUser = response.user!;
+    return User(
+      id: supabaseUser.id,
+      email: supabaseUser.email ?? '',
+      name: supabaseUser.userMetadata?['full_name'] ?? '',
+      createdAt: DateTime.parse(supabaseUser.createdAt),
+    );
   }
 
   @override

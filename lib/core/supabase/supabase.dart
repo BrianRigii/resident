@@ -1,5 +1,5 @@
-import 'dart:io';
-
+import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseService {
@@ -11,12 +11,14 @@ class SupabaseService {
 
   SupabaseService._internal();
 
-  void init() async {
-    Map<String, String> env = Platform.environment;
-    await Supabase.initialize(
-      url: env['SUPABASE_URL'] ?? '',
+  Future<void> init() async {
+    // Load environment variables from env.json
+    final envString = await rootBundle.loadString('env.json');
+    final env = json.decode(envString) as Map<String, dynamic>;
 
-      anonKey: env['SUPABASE_ANON_KEY'] ?? '',
+    await Supabase.initialize(
+      url: env['supabase_url'] ?? '',
+      anonKey: env['supabase_anon_key'] ?? '',
     );
   }
 
