@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:resident/features/auth/models/user.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide User;
 
@@ -35,22 +37,27 @@ class AuthApiImpl extends AuthApi {
 
   @override
   Future<User> signUp(Map<String, dynamic> data) async {
-    final response = await supabaseClient.auth.signUp(
-      email: data['email'],
-      password: data['password'],
-    );
+    try {
+      final response = await supabaseClient.auth.signUp(
+        email: data['email'],
+        password: data['password'],
+      );
 
-    if (response.user == null) {
-      throw Exception('Sign up failed');
+      if (response.user == null) {
+        throw Exception('Sign up failed');
+      }
+
+      final supabaseUser = response.user!;
+      return User(
+        id: supabaseUser.id,
+        email: supabaseUser.email ?? '',
+        name: supabaseUser.userMetadata?['full_name'] ?? '',
+        createdAt: DateTime.parse(supabaseUser.createdAt),
+      );
+    } catch (e) {
+      log('Error during sign up: $e');
+      rethrow;
     }
-
-    final supabaseUser = response.user!;
-    return User(
-      id: supabaseUser.id,
-      email: supabaseUser.email ?? '',
-      name: supabaseUser.userMetadata?['full_name'] ?? '',
-      createdAt: DateTime.parse(supabaseUser.createdAt),
-    );
   }
 
   @override

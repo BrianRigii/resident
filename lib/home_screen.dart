@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _screens = [
     const DashboardView(),
-    const PropertiesView(),
+    const PropertiesScreen(),
     const UnitsView(),
     const ProfileView(),
   ];
@@ -38,15 +38,6 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
       ),
-      floatingActionButton: _currentIndex == 0 || _currentIndex == 1
-          ? AppFAB(
-              icon: _currentIndex == 0 ? Icons.add : Icons.add_business,
-              onPressed: () {
-                // TODO: Add property or unit
-              },
-              tooltip: _currentIndex == 0 ? 'Add Unit' : 'Add Property',
-            )
-          : null,
     );
   }
 }
@@ -99,7 +90,7 @@ class DashboardView extends StatelessWidget {
                 crossAxisCount: 2,
                 mainAxisSpacing: AppSpacing.md,
                 crossAxisSpacing: AppSpacing.md,
-                childAspectRatio: 1.4,
+
                 children: const [
                   StatsCard(
                     title: 'Total Properties',
@@ -157,7 +148,7 @@ class DashboardView extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(AppSpacing.sm),
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.1),
+                            color: AppColors.primary.withAlpha(25),
                             borderRadius: BorderRadius.circular(
                               AppSpacing.radiusMd,
                             ),
@@ -234,33 +225,6 @@ class DashboardView extends StatelessWidget {
 
               const SizedBox(height: AppSpacing.xxxl),
             ]),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-// Properties View Placeholder
-class PropertiesView extends StatelessWidget {
-  const PropertiesView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar(
-          floating: true,
-          backgroundColor: AppColors.background,
-          elevation: 0,
-          title: Text('Properties', style: AppTextStyles.h4),
-        ),
-        const SliverFillRemaining(
-          child: EmptyState(
-            icon: Icons.apartment,
-            title: 'No Properties Yet',
-            description: 'Add your first property to get started',
-            actionText: 'Add Property',
           ),
         ),
       ],

@@ -105,7 +105,6 @@ class InfoCard extends StatelessWidget {
   }
 }
 
-/// Stats card with optional trend indicator
 class StatsCard extends StatelessWidget {
   final String title;
   final String value;
@@ -129,7 +128,7 @@ class StatsCard extends StatelessWidget {
     final cardColor = color ?? AppColors.primary;
 
     return AppCard(
-      backgroundColor: cardColor.withOpacity(0.05),
+      backgroundColor: cardColor.withAlpha(25),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: AppSpacing.md,
@@ -140,7 +139,7 @@ class StatsCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(AppSpacing.sm),
                 decoration: BoxDecoration(
-                  color: cardColor.withOpacity(0.1),
+                  color: cardColor.withAlpha(25),
                   borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
                 ),
                 child: Icon(icon, color: cardColor, size: AppSpacing.iconMd),
@@ -153,8 +152,8 @@ class StatsCard extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: trendPositive
-                        ? AppColors.success.withOpacity(0.1)
-                        : AppColors.error.withOpacity(0.1),
+                        ? AppColors.success.withAlpha(25)
+                        : AppColors.error.withAlpha(25),
                     borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
                   ),
                   child: Row(
