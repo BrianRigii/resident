@@ -1,50 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:resident/core/theme/app_colors.dart';
 import 'package:resident/core/theme/app_spacing.dart';
 import 'package:resident/core/theme/app_text_styles.dart';
 import 'package:resident/core/widgets/buttons.dart';
 import 'package:resident/core/widgets/cards.dart';
 import 'package:resident/core/widgets/common_widgets.dart';
-import 'package:resident/core/widgets/navigation.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScaffold extends StatelessWidget {
   static const String path = '/home';
-  const HomeScreen({super.key});
+  final StatefulNavigationShell navigationShell;
+  const HomeScaffold({super.key, required this.navigationShell});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
-
-  final List<Widget> _screens = [
-    const DashboardView(),
-    const PropertiesScreen(),
-    const UnitsView(),
-    const ProfileView(),
+  final items = const [
+    BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: 'Dashboard'),
+    BottomNavigationBarItem(icon: Icon(Icons.apartment), label: 'Properties'),
+    BottomNavigationBarItem(icon: Icon(Icons.meeting_room), label: 'Units'),
+    BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
   ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
-      body: _screens[_currentIndex],
-      bottomNavigationBar: AppBottomNavBar(
-        currentIndex: _currentIndex,
+      bottomNavigationBar: BottomNavigationBar(
+        items: items,
+        currentIndex: navigationShell.currentIndex,
         onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
+          navigationShell.goBranch(
+            index,
+            initialLocation: index == navigationShell.currentIndex,
+          );
         },
       ),
+      body: navigationShell,
     );
   }
 }
 
 // Dashboard View
-class DashboardView extends StatelessWidget {
-  const DashboardView({super.key});
+class DashboardScreen extends StatelessWidget {
+  static const String path = '/dashboard';
+  const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -224,107 +219,6 @@ class DashboardView extends StatelessWidget {
               ),
 
               const SizedBox(height: AppSpacing.xxxl),
-            ]),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-// Units View Placeholder
-class UnitsView extends StatelessWidget {
-  const UnitsView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar(
-          floating: true,
-          backgroundColor: AppColors.background,
-          elevation: 0,
-          title: Text('Units', style: AppTextStyles.h4),
-        ),
-        const SliverFillRemaining(
-          child: EmptyState(
-            icon: Icons.meeting_room,
-            title: 'No Units Yet',
-            description: 'Add properties first, then create units within them',
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-// Profile View Placeholder
-class ProfileView extends StatelessWidget {
-  const ProfileView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar(
-          floating: true,
-          backgroundColor: AppColors.background,
-          elevation: 0,
-          title: Text('Profile', style: AppTextStyles.h4),
-        ),
-        SliverPadding(
-          padding: const EdgeInsets.all(AppSpacing.md),
-          sliver: SliverList(
-            delegate: SliverChildListDelegate([
-              // Profile Header
-              AppCard(
-                child: Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 48,
-                      backgroundColor: AppColors.primary.withOpacity(0.1),
-                      child: const Icon(
-                        Icons.person,
-                        size: 48,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-                    Text('John Doe', style: AppTextStyles.h5),
-                    Text(
-                      'john.doe@example.com',
-                      style: AppTextStyles.body2.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: AppSpacing.xl),
-
-              // Settings Options
-              InfoCard(
-                icon: Icons.settings,
-                title: 'Settings',
-                value: 'Account preferences',
-                onTap: () {},
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              InfoCard(
-                icon: Icons.help_outline,
-                title: 'Help & Support',
-                value: 'Get assistance',
-                onTap: () {},
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              InfoCard(
-                icon: Icons.logout,
-                title: 'Sign Out',
-                value: 'Logout from account',
-                iconColor: AppColors.error,
-                onTap: () {},
-              ),
             ]),
           ),
         ),

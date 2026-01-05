@@ -8,7 +8,6 @@ class Property {
     required this.id,
     required this.name,
     required this.address,
-
     required this.landLordId,
   });
 }

@@ -33,7 +33,7 @@ class _AuthScreenState extends State<AuthScreen> {
     User user = authMode == AuthMode.signIn
         ? await authService.signIn(formData)
         : await authService.signUp(formData);
-    if (mounted && user.id.isNotEmpty) context.go(HomeScreen.path);
+    if (mounted && user.id.isNotEmpty) context.go(HomeScaffold.path);
   }
 
   @override

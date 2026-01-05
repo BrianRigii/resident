@@ -5,6 +5,7 @@ import 'package:resident/core/theme/app_text_styles.dart';
 import 'package:resident/core/widgets/cards.dart';
 
 class ProfileScreen extends StatelessWidget {
+  static const path = '/profile';
   const ProfileScreen({super.key});
 
   @override

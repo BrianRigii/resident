@@ -22,7 +22,7 @@ class PropertApiImpl extends PropertApi {
         id: item['id'],
         name: item['name'],
         address: item['address'],
-        units: [], // Assuming units are fetched separately
+
         landLordId: item['landLordId'],
       );
     }).toList();
@@ -39,8 +39,6 @@ class PropertApiImpl extends PropertApi {
       id: response['id'],
       name: response['name'],
       address: response['address'],
-      units: [],
-      // Assuming units are fetched separately
       landLordId: response['landLordId'],
     );
   }

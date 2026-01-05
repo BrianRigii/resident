@@ -4,6 +4,7 @@ import 'package:resident/core/theme/app_text_styles.dart';
 import 'package:resident/core/widgets/common_widgets.dart';
 
 class UnitsScreen extends StatelessWidget {
+  static const path = '/units';
   const UnitsScreen({super.key});
 
   @override
