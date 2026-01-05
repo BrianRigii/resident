@@ -17,7 +17,7 @@ GoRouter router = GoRouter(
       redirect: (context, state) {
         return context.read<AuthService>().currentUser == null
             ? AuthScreen.path
-            : HomeScaffold.path;
+            : DashboardScreen.path;
       },
     ),
     GoRoute(
@@ -34,14 +34,26 @@ GoRouter router = GoRouter(
               path: DashboardScreen.path,
               builder: (context, state) => const DashboardScreen(),
             ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
             GoRoute(
               path: PropertiesScreen.path,
               builder: (context, state) => const PropertiesScreen(),
             ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
             GoRoute(
               path: UnitsScreen.path,
               builder: (context, state) => const UnitsScreen(),
             ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
             GoRoute(
               path: ProfileScreen.path,
               builder: (context, state) => const ProfileScreen(),

@@ -7,7 +7,8 @@ import 'package:resident/core/theme/app_text_styles.dart';
 import 'package:resident/features/auth/domain/auth_service.dart';
 import 'package:resident/features/auth/models/user.dart';
 import 'package:resident/features/auth/presentation/auth_form.dart';
-import 'package:resident/home_screen.dart';
+
+import 'package:resident/splash_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   static const String path = '/auth';
@@ -33,7 +34,7 @@ class _AuthScreenState extends State<AuthScreen> {
     User user = authMode == AuthMode.signIn
         ? await authService.signIn(formData)
         : await authService.signUp(formData);
-    if (mounted && user.id.isNotEmpty) context.go(HomeScaffold.path);
+    if (mounted && user.id.isNotEmpty) context.go(SplashScreen.path);
   }
 
   @override
