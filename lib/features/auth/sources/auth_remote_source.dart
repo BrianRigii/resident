@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:resident/features/auth/models/user.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide User;
 
-abstract class AuthApi {
+abstract class AuthRemoteSource {
   Future<User> signIn(Map<String, dynamic> data);
 
   Future<User> signUp(Map<String, dynamic> data);
@@ -11,9 +11,9 @@ abstract class AuthApi {
   Future<void> signOut();
 }
 
-class AuthApiImpl extends AuthApi {
+class AuthRemoteSourceImpl extends AuthRemoteSource {
   final SupabaseClient supabaseClient;
-  AuthApiImpl(this.supabaseClient);
+  AuthRemoteSourceImpl(this.supabaseClient);
 
   @override
   Future<User> signIn(Map<String, dynamic> data) async {

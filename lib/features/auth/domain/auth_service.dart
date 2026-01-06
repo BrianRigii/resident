@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:resident/features/auth/auth_api.dart';
+import 'package:resident/features/auth/sources/auth_remote_source.dart';
 import 'package:resident/features/auth/models/user.dart';
+import 'package:resident/features/auth/sources/auth_local_source.dart';
 
 abstract class AuthService extends ChangeNotifier {
   bool get isAuthenticating;
@@ -11,8 +12,10 @@ abstract class AuthService extends ChangeNotifier {
 }
 
 class AuthServiceImpl extends AuthService {
-  final AuthApi authApi;
-  AuthServiceImpl(this.authApi);
+  final AuthRemoteSource authApi;
+  final AuthLocalSource authLocalSource;
+
+  AuthServiceImpl(this.authApi, this.authLocalSource);
 
   bool _isAuthenticating = false;
   @override
@@ -23,21 +26,15 @@ class AuthServiceImpl extends AuthService {
     notifyListeners();
   }
 
-  User? _currentUser;
   @override
-  User? get currentUser => _currentUser;
-
-  set currentUser(User? user) {
-    _currentUser = user;
-    notifyListeners();
-  }
+  User? get currentUser => authLocalSource.getCachedUser();
 
   @override
   Future<User> signIn(Map<String, dynamic> data) async {
     try {
       isAuthenticating = true;
       User user = await authApi.signIn(data);
-      currentUser = user;
+      authLocalSource.cacheUser(user);
       isAuthenticating = false;
       return user;
     } catch (e) {
@@ -48,7 +45,7 @@ class AuthServiceImpl extends AuthService {
 
   @override
   void logOut() {
-    currentUser = null;
+    authLocalSource.clearCache();
   }
 
   @override
@@ -56,7 +53,7 @@ class AuthServiceImpl extends AuthService {
     try {
       isAuthenticating = true;
       User user = await authApi.signUp(data);
-      currentUser = user;
+      authLocalSource.cacheUser(user);
       isAuthenticating = false;
       return user;
     } catch (e) {

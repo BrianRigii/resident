@@ -1,18 +1,14 @@
+// supabase_service.dart
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseService {
-  static final SupabaseService instance = SupabaseService._internal();
+  final SupabaseClient client;
 
-  factory SupabaseService() {
-    return instance;
-  }
+  SupabaseService._(this.client);
 
-  SupabaseService._internal();
-
-  Future<void> init() async {
-    // Load environment variables from env.json
+  static Future<SupabaseService> create() async {
     final envString = await rootBundle.loadString('env.json');
     final env = json.decode(envString) as Map<String, dynamic>;
 
@@ -20,7 +16,7 @@ class SupabaseService {
       url: env['supabase_url'] ?? '',
       anonKey: env['supabase_anon_key'] ?? '',
     );
-  }
 
-  SupabaseClient get client => Supabase.instance.client;
+    return SupabaseService._(Supabase.instance.client);
+  }
 }
