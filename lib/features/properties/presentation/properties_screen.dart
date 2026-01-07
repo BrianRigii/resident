@@ -5,7 +5,7 @@ import 'package:resident/core/theme/app_colors.dart';
 import 'package:resident/core/theme/app_text_styles.dart';
 import 'package:resident/core/widgets/common_widgets.dart';
 import 'package:resident/features/properties/presentation/add_property_form.dart';
-import 'package:resident/features/properties/property_service.dart';
+import 'package:resident/features/properties/presentation/property_notifier.dart';
 
 class PropertiesScreen extends StatefulWidget {
   static const path = '/properties';
@@ -30,8 +30,8 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
   }
 
   void _handleSubmitProperty(Map<String, dynamic> formData) async {
-    PropertyService propertyService = context.read<PropertyService>();
-    await propertyService.addProperty(formData);
+    PropertyNotifier propertyNotifier = context.read<PropertyNotifier>();
+    propertyNotifier.addProperty(formData);
   }
 
   @override

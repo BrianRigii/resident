@@ -1,9 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:resident/features/properties/models/property.dart';
 import 'package:resident/features/properties/property_remote_source.dart';
 
-abstract class PropertyService extends ChangeNotifier {
-  bool isFetchingProperties = false;
+abstract class PropertyService {
   Future<List<Property>> getProperties();
   Future<Property> getPropertyById(String id);
   Future<void> addProperty(Map<String, dynamic> data);
@@ -15,25 +13,13 @@ class PropertyServiceImpl extends PropertyService {
   final PropertyRemoteSource propertApi;
   PropertyServiceImpl(this.propertApi);
 
-  bool _isFetchingProperties = false;
-  @override
-  bool get isFetchingProperties => _isFetchingProperties;
-
-  @override
-  set isFetchingProperties(bool val) {
-    _isFetchingProperties = val;
-    notifyListeners();
-  }
-
   @override
   Future<List<Property>> getProperties() async {
     try {
-      isFetchingProperties = true;
       List<Property> properties = await propertApi.fetchProperties();
-      isFetchingProperties = false;
+
       return properties;
     } catch (e) {
-      isFetchingProperties = false;
       rethrow;
     }
   }

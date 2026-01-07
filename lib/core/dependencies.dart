@@ -7,6 +7,8 @@ import 'package:resident/features/auth/sources/auth_local_source.dart';
 import 'package:resident/features/auth/sources/auth_remote_source.dart';
 
 import 'package:hive_ce_flutter/hive_flutter.dart';
+import 'package:resident/features/properties/property_remote_source.dart';
+import 'package:resident/features/properties/property_service.dart';
 import 'package:resident/hive/hive_registrar.g.dart';
 
 final GetIt getIt = GetIt.instance;
@@ -27,6 +29,15 @@ Future<void> setupDependencies() async {
   getIt.registerSingletonAsync<AuthRemoteSource>(() async {
     final supabase = await getIt.getAsync<SupabaseService>();
     return AuthRemoteSourceImpl(supabase.client);
+  });
+
+  getIt.registerLazySingletonAsync<PropertyRemoteSource>(() async {
+    final supabase = await getIt.getAsync<SupabaseService>();
+    return PropertyRemoteSourceImpl(supabase.client);
+  });
+
+  getIt.registerLazySingletonAsync<PropertyService>(() async {
+    return PropertyServiceImpl(await getIt.getAsync<PropertyRemoteSource>());
   });
 
   await getIt.allReady();
