@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:resident/features/properties/property_service.dart';
 
@@ -18,5 +20,11 @@ class PropertyNotifier extends ChangeNotifier {
     PropertyService service = await propertyService;
     await service.addProperty(data);
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    log('Disposing PropertyNotifier');
   }
 }

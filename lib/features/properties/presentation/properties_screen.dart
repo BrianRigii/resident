@@ -36,6 +36,7 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<PropertyNotifier>();
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () => _onAddProperty(context),
