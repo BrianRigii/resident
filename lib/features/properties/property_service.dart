@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:resident/features/properties/models/property.dart';
-import 'package:resident/features/properties/propert_api.dart';
+import 'package:resident/features/properties/property_remote_source.dart';
 
 abstract class PropertyService extends ChangeNotifier {
   bool isFetchingProperties = false;
@@ -12,7 +12,7 @@ abstract class PropertyService extends ChangeNotifier {
 }
 
 class PropertyServiceImpl extends PropertyService {
-  final PropertApi propertApi;
+  final PropertyRemoteSource propertApi;
   PropertyServiceImpl(this.propertApi);
 
   bool _isFetchingProperties = false;

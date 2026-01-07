@@ -1,8 +1,10 @@
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
 import 'package:resident/features/auth/domain/auth_service.dart';
 import 'package:resident/features/auth/presentation/auth_screen.dart';
 import 'package:resident/features/profile/presentation/profile_screen.dart';
+
 import 'package:resident/features/properties/presentation/properties_screen.dart';
 import 'package:resident/features/units/presentation/units_screen.dart';
 import 'package:resident/home_screen.dart';

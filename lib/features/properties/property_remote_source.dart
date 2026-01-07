@@ -1,7 +1,7 @@
 import 'package:resident/features/properties/models/property.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-abstract class PropertApi {
+abstract class PropertyRemoteSource {
   Future<List<Property>> fetchProperties();
   Future<Property> fetchPropertyById(String id);
   Future<void> createProperty(Map<String, dynamic> data);
@@ -9,10 +9,10 @@ abstract class PropertApi {
   Future<void> deleteProperty(String id);
 }
 
-class PropertApiImpl extends PropertApi {
+class PropertyRemoteSourceImpl extends PropertyRemoteSource {
   final SupabaseClient supabaseClient;
   String get _propertiesTable => 'properties';
-  PropertApiImpl(this.supabaseClient);
+  PropertyRemoteSourceImpl(this.supabaseClient);
 
   @override
   Future<List<Property>> fetchProperties() async {

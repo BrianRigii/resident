@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:resident/core/dependencies.dart';
 import 'package:resident/core/router.dart';
-import 'package:resident/core/supabase/supabase.dart';
+
 import 'package:resident/core/theme/app_theme.dart';
 
 import 'package:resident/features/auth/sources/auth_remote_source.dart';

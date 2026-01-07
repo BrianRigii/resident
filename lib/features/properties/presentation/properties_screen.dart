@@ -1,31 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:resident/core/theme/app_colors.dart';
 import 'package:resident/core/theme/app_text_styles.dart';
 import 'package:resident/core/widgets/common_widgets.dart';
+import 'package:resident/features/properties/presentation/add_property_form.dart';
+import 'package:resident/features/properties/property_service.dart';
 
-class PropertiesScreen extends StatelessWidget {
+class PropertiesScreen extends StatefulWidget {
   static const path = '/properties';
   const PropertiesScreen({super.key});
 
   @override
+  State<PropertiesScreen> createState() => _PropertiesScreenState();
+}
+
+class _PropertiesScreenState extends State<PropertiesScreen> {
+  void _onAddProperty(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      useRootNavigator: true,
+
+      sheetAnimationStyle: AnimationStyle(
+        curve: Curves.easeInOut,
+        duration: const Duration(milliseconds: 300),
+      ),
+      builder: (context) => AddPropertyForm(onSubmit: _handleSubmitProperty),
+    );
+  }
+
+  void _handleSubmitProperty(Map<String, dynamic> formData) async {
+    PropertyService propertyService = context.read<PropertyService>();
+    await propertyService.addProperty(formData);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar(
-          floating: true,
-          backgroundColor: AppColors.background,
-          elevation: 0,
-          title: Text('Properties', style: AppTextStyles.h4),
-        ),
-        const SliverFillRemaining(
-          child: EmptyState(
-            icon: Icons.apartment,
-            title: 'No Properties Yet',
-            description: 'Add your first property to get started',
-            actionText: 'Add Property',
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _onAddProperty(context),
+        child: const Icon(Icons.add),
+      ),
+
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            floating: true,
+            backgroundColor: AppColors.background,
+            elevation: 0,
+            title: Text('Properties', style: AppTextStyles.h4),
           ),
-        ),
-      ],
+          const SliverFillRemaining(
+            child: EmptyState(
+              icon: Icons.apartment,
+              title: 'No Properties Yet',
+              description: 'Add your first property to get started',
+              actionText: 'Add Property',
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
