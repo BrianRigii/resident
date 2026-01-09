@@ -1,8 +1,6 @@
 pipeline {
-   agent {
-    docker {
-      image 'cirrusci/flutter:stable'
-    }
+  agent {
+    label 'flutter' // matches the agent label in Docker Compose
   }
 
   options {
@@ -17,7 +15,7 @@ pipeline {
       }
     }
 
-    stage('Flutter build APK') {
+    stage('Flutter Build APK') {
       steps {
         sh '''
           flutter --version

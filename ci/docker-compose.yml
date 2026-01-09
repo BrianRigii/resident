@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  jenkins-controller:
+    image: jenkins/jenkins:lts
+    container_name: jenkins-controller
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    restart: unless-stopped
+
+  jenkins-agent:
+    image: jenkins-flutter-agent
+    container_name: jenkins-agent
+    depends_on:
+      - jenkins-controller
+    volumes:
+      - flutter_cache:/home/jenkins/.pub-cache
+    labels:
+      - "flutter"
+    environment:
+      - JENKINS_URL=http://jenkins-controller:8080
+      - JENKINS_AGENT_NAME=flutter-agent
+    restart: unless-stopped
+
+volumes:
+  jenkins_home:
+  flutter_cache:
