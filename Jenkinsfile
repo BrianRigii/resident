@@ -1,5 +1,9 @@
 pipeline {
-  agent any
+   agent {
+    docker {
+      image 'cirrusci/flutter:stable'
+    }
+  }
 
   options {
     timestamps()
