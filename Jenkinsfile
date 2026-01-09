@@ -1,21 +1,35 @@
 pipeline {
-    agent any
+  agent any
 
-    stages {
-        stage('Build') {
-            steps {
-                echo 'Building...'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing...'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying...'
-            }
-        }
+  options {
+    timestamps()
+    timeout(time: 30, unit: 'MINUTES')
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
     }
+
+    stage('Flutter build APK') {
+      steps {
+        sh '''
+          flutter --version
+          flutter pub get
+          flutter build apk --debug
+        '''
+      }
+    }
+  }
+
+  post {
+    success {
+      archiveArtifacts artifacts: 'build/app/outputs/flutter-apk/*.apk', fingerprint: true
+    }
+    always {
+      cleanWs()
+    }
+  }
 }
