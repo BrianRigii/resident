@@ -2,7 +2,6 @@ class Unit {
   final String id;
   final String name;
   final String propertyId;
-  final String? tenantId;
   final double rentPrice;
   final double? taxRate;
   final String? notes;
@@ -12,7 +11,6 @@ class Unit {
     required this.name,
     required this.rentPrice,
     required this.propertyId,
-    this.tenantId,
     this.taxRate,
     this.notes,
   });

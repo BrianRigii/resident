@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:resident/core/theme/app_spacing.dart';
+import 'package:resident/core/utils/uuid.dart';
 import 'package:resident/features/auth/domain/auth_service.dart';
 
 class AddPropertyForm extends StatefulWidget {
@@ -21,6 +22,7 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
   Map<String, dynamic> get formData {
     final AuthService authService = context.read<AuthService>();
     return {
+      "id": getUUID,
       'name': _nameController.text,
       'created_by': authService.currentUser!.id,
     };

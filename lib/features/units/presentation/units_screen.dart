@@ -9,7 +9,14 @@ class UnitsScreen extends StatelessWidget {
   const UnitsScreen({super.key});
 
   void _onAddUnit(BuildContext context) {
-    showModalBottomSheet(context: context, builder: (context) => AddUnitForm());
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => AddUnitForm(onSubmit: _handleSubmitUnit),
+    );
+  }
+
+  void _handleSubmitUnit(Map<String, dynamic> formData) {
+    // Handle unit submission logic here
   }
 
   @override
