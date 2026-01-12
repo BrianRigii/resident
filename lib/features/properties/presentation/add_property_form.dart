@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:resident/core/dependencies.dart';
 
 import 'package:resident/core/theme/app_spacing.dart';
 import 'package:resident/features/auth/domain/auth_service.dart';
