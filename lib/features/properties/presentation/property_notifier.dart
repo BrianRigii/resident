@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:resident/features/properties/models/property.dart';
 import 'package:resident/features/properties/property_service.dart';
 
 class PropertyNotifier extends ChangeNotifier {
@@ -16,6 +17,8 @@ class PropertyNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<Property> properties = [];
+
   void addProperty(Map<String, dynamic> data) async {
     PropertyService service = await propertyService;
     await service.addProperty(data);
@@ -24,7 +27,7 @@ class PropertyNotifier extends ChangeNotifier {
 
   Future fetchProperties() async {
     PropertyService service = await propertyService;
-    await service.getProperties();
+    properties.addAll(await service.getProperties());
     notifyListeners();
   }
 

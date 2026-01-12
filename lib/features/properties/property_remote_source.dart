@@ -21,9 +21,9 @@ class PropertyRemoteSourceImpl extends PropertyRemoteSource {
       return Property(
         id: item['id'],
         name: item['name'],
-        address: item['address'],
+        address: item['address'] ?? "Nairobi",
 
-        landLordId: item['landLordId'],
+        landLordId: [item['landlord_id']],
       );
     }).toList();
   }

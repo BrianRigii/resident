@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:resident/core/utils/uuid.dart';
 import 'package:resident/features/properties/models/property.dart';
+import 'package:resident/features/properties/presentation/property_notifier.dart';
 
 class AddUnitForm extends StatefulWidget {
   final Function(Map<String, dynamic>) onSubmit;
@@ -36,56 +40,97 @@ class _AddUnitFormState extends State<AddUnitForm> {
     }
   }
 
+  void _onPropertyChanged(Property? property) {
+    setState(() {
+      selectedProperty = property;
+    });
+  }
+
+  @override
+  initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<PropertyNotifier>().fetchProperties();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Text('Add unit form'),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          spacing: 12,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text('Add unit form'),
 
-          TextFormField(
-            controller: _unitNameController,
-            decoration: const InputDecoration(
-              labelText: 'Unit Name',
-              hintText: 'e.g., Apt 3B',
+            Selector<PropertyNotifier, List<Property>>(
+              selector: (context, propertyNotifier) =>
+                  propertyNotifier.properties,
+              builder: (context, properties, _) {
+                log(
+                  'Building property dropdown with ${properties.length} properties',
+                );
+                return DropdownButtonFormField<Property>(
+                  decoration: const InputDecoration(labelText: 'Property'),
+                  items: properties.map((property) {
+                    return DropdownMenuItem<Property>(
+                      value: property,
+                      child: Text(property.name),
+                    );
+                  }).toList(),
+                  onChanged: _onPropertyChanged,
+                );
+              },
             ),
-            textInputAction: TextInputAction.next,
-          ),
-          const SizedBox(height: 12),
 
-          TextFormField(
-            controller: _rentPriceController,
-            decoration: const InputDecoration(
-              labelText: 'Rent Price',
-              prefixText: '\$',
+            TextFormField(
+              controller: _unitNameController,
+              decoration: const InputDecoration(
+                labelText: 'Unit Name',
+                hintText: 'e.g., Apt 3B',
+              ),
+              textInputAction: TextInputAction.next,
             ),
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            textInputAction: TextInputAction.next,
-          ),
-          const SizedBox(height: 12),
 
-          TextFormField(
-            controller: _taxRateController,
-            decoration: const InputDecoration(
-              labelText: 'Tax Rate (%)',
-              suffixText: '%',
+            TextFormField(
+              controller: _rentPriceController,
+              decoration: const InputDecoration(
+                labelText: 'Rent Price',
+                prefixText: '\$',
+              ),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              textInputAction: TextInputAction.next,
             ),
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            textInputAction: TextInputAction.next,
-          ),
-          const SizedBox(height: 12),
 
-          TextFormField(
-            controller: _notesController,
-            decoration: const InputDecoration(labelText: 'Notes'),
-            maxLines: 3,
-            textInputAction: TextInputAction.done,
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(onPressed: submit, child: const Text('Add Unit')),
-        ],
+            TextFormField(
+              controller: _taxRateController,
+              decoration: const InputDecoration(
+                labelText: 'Tax Rate (%)',
+                suffixText: '%',
+              ),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              textInputAction: TextInputAction.next,
+            ),
+
+            TextFormField(
+              controller: _notesController,
+              decoration: const InputDecoration(labelText: 'Notes'),
+              maxLines: 3,
+              textInputAction: TextInputAction.done,
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton(onPressed: submit, child: const Text('Add Unit')),
+          ],
+        ),
       ),
     );
   }
