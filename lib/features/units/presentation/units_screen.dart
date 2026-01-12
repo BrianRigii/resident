@@ -11,7 +11,12 @@ class UnitsScreen extends StatelessWidget {
   void _onAddUnit(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (context) => AddUnitForm(onSubmit: _handleSubmitUnit),
+      builder: (context) => DraggableScrollableSheet(
+        builder: (context, scrollController) => SingleChildScrollView(
+          controller: scrollController,
+          child: AddUnitForm(onSubmit: _handleSubmitUnit),
+        ),
+      ),
     );
   }
 

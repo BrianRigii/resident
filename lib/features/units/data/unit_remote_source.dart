@@ -29,7 +29,8 @@ class UnitRemoteSourceImpl extends UnitRemoteSource {
 
   @override
   Future<void> createUnit(Map<String, dynamic> data) async {
-    // Implement API call to create a new unit
+    await supabaseClient.from(_tableName).insert(data);
+    return;
   }
 
   @override
