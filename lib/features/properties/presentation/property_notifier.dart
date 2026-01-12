@@ -22,6 +22,12 @@ class PropertyNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future fetchProperties() async {
+    PropertyService service = await propertyService;
+    await service.getProperties();
+    notifyListeners();
+  }
+
   @override
   void dispose() {
     super.dispose();

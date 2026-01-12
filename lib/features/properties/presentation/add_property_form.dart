@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:resident/core/dependencies.dart';
 
 import 'package:resident/core/theme/app_spacing.dart';
+import 'package:resident/features/auth/domain/auth_service.dart';
 
 class AddPropertyForm extends StatefulWidget {
   static const path = '/add-property-form';
@@ -16,7 +19,13 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
   final _formKey = GlobalKey<FormState>(debugLabel: 'add_property_form');
   final TextEditingController _nameController = TextEditingController();
 
-  Map<String, dynamic> get formData => {'name': _nameController.text};
+  Map<String, dynamic> get formData {
+    final AuthService authService = context.read<AuthService>();
+    return {
+      'name': _nameController.text,
+      'created_by': authService.currentUser!.id,
+    };
+  }
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {

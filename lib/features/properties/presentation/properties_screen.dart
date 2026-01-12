@@ -34,6 +34,10 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
     propertyNotifier.addProperty(formData);
   }
 
+  Future<void> _refreshProperties() async {
+    context.read<PropertyNotifier>().fetchProperties();
+  }
+
   @override
   Widget build(BuildContext context) {
     context.watch<PropertyNotifier>();
@@ -51,12 +55,15 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
             elevation: 0,
             title: Text('Properties', style: AppTextStyles.h4),
           ),
-          const SliverFillRemaining(
-            child: EmptyState(
-              icon: Icons.apartment,
-              title: 'No Properties Yet',
-              description: 'Add your first property to get started',
-              actionText: 'Add Property',
+          SliverFillRemaining(
+            child: RefreshIndicator(
+              onRefresh: _refreshProperties,
+              child: EmptyState(
+                icon: Icons.apartment,
+                title: 'No Properties Yet',
+                description: 'Add your first property to get started',
+                actionText: 'Add Property',
+              ),
             ),
           ),
         ],
