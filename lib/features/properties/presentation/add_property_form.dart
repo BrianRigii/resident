@@ -4,7 +4,8 @@ import 'package:provider/provider.dart';
 
 import 'package:resident/core/theme/app_spacing.dart';
 import 'package:resident/core/utils/uuid.dart';
-import 'package:resident/features/auth/domain/auth_service.dart';
+
+import 'package:resident/features/auth/presentation/auth_notifier.dart';
 
 class AddPropertyForm extends StatefulWidget {
   static const path = '/add-property-form';
@@ -20,11 +21,11 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
   final TextEditingController _nameController = TextEditingController();
 
   Map<String, dynamic> get formData {
-    final AuthService authService = context.read<AuthService>();
+    final AuthNotifier authNotifier = context.read<AuthNotifier>();
     return {
       "id": getUUID,
       'name': _nameController.text,
-      'created_by': authService.currentUser!.id,
+      'created_by': authNotifier.getAuthenticatedUser().id,
     };
   }
 

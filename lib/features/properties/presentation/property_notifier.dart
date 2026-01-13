@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:resident/features/properties/models/property.dart';
-import 'package:resident/features/properties/property_service.dart';
+import 'package:resident/features/properties/domain/property_service.dart';
 
 class PropertyNotifier extends ChangeNotifier {
   final Future<PropertyService> propertyService;

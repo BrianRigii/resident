@@ -5,13 +5,14 @@ import 'package:resident/core/dependencies.dart';
 import 'package:resident/core/router.dart';
 
 import 'package:resident/core/theme/app_theme.dart';
+import 'package:resident/features/auth/presentation/auth_notifier.dart';
 
-import 'package:resident/features/auth/sources/auth_remote_source.dart';
+
 import 'package:resident/features/auth/domain/auth_service.dart';
-import 'package:resident/features/auth/sources/auth_local_source.dart';
+
 import 'package:resident/features/properties/presentation/property_notifier.dart';
 
-import 'package:resident/features/properties/property_service.dart';
+import 'package:resident/features/properties/domain/property_service.dart';
 import 'package:resident/features/units/domain/unit_service.dart';
 import 'package:resident/features/units/notifiers/unit_notifier.dart';
 
@@ -28,11 +29,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AuthService>(
-          create: (context) => AuthServiceImpl(
-            getIt<AuthRemoteSource>(),
-            getIt<AuthLocalSource>(),
-          ),
+        ChangeNotifierProvider<AuthNotifier>(
+          create: (context) =>
+              AuthNotifier(authService: getIt.get<AuthService>()),
         ),
         ChangeNotifierProvider<PropertyNotifier>(
           create: (context) => PropertyNotifier(

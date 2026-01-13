@@ -1,5 +1,5 @@
 import 'package:resident/features/properties/models/property.dart';
-import 'package:resident/features/properties/property_remote_source.dart';
+import 'package:resident/features/properties/sources/property_remote_source.dart';
 
 abstract class PropertyService {
   Future<List<Property>> getProperties();

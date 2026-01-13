@@ -6,7 +6,8 @@ import 'package:resident/core/theme/app_text_styles.dart';
 import 'package:resident/core/widgets/buttons.dart';
 import 'package:resident/core/widgets/common_widgets.dart';
 import 'package:resident/core/widgets/input_fields.dart';
-import 'package:resident/features/auth/domain/auth_service.dart';
+
+import 'package:resident/features/auth/presentation/auth_notifier.dart';
 
 class AuthForm extends StatefulWidget {
   final AuthMode authMode;
@@ -74,7 +75,7 @@ class _AuthFormState extends State<AuthForm> {
 
   @override
   Widget build(BuildContext context) {
-    final isAuthenticating = context.select<AuthService, bool>(
+    final isAuthenticating = context.select<AuthNotifier, bool>(
       (authService) => authService.isAuthenticating,
     );
 
