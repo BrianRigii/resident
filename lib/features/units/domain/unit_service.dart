@@ -10,13 +10,13 @@ abstract class UnitService {
 }
 
 class UnitServiceImpl extends UnitService {
-  final UnitRemoteSource unitApi;
-  UnitServiceImpl(this.unitApi);
+  final UnitRemoteSource unitRemoteSource;
+  UnitServiceImpl(this.unitRemoteSource);
 
   @override
   Future<List<Unit>> getUnits() async {
     try {
-      List<Unit> units = await unitApi.fetchUnits();
+      List<Unit> units = await unitRemoteSource.fetchUnits();
 
       return units;
     } catch (e) {
@@ -26,21 +26,21 @@ class UnitServiceImpl extends UnitService {
 
   @override
   Future<Unit> getUnitById(String id) async {
-    return await unitApi.fetchUnitById(id);
+    return await unitRemoteSource.fetchUnitById(id);
   }
 
   @override
   Future<void> addUnit(Map<String, dynamic> data) async {
-    await unitApi.createUnit(data);
+    await unitRemoteSource.createUnit(data);
   }
 
   @override
   Future<void> editUnit(String id, Map<String, dynamic> data) async {
-    await unitApi.updateUnit(id, data);
+    await unitRemoteSource.updateUnit(id, data);
   }
 
   @override
   Future<void> removeUnit(String id) async {
-    await unitApi.deleteUnit(id);
+    await unitRemoteSource.deleteUnit(id);
   }
 }

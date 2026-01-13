@@ -27,7 +27,7 @@ class _AddUnitFormState extends State<AddUnitForm> {
     return {
       "id": getUUID,
       'property_id': selectedProperty?.id,
-      'unit_name': _unitNameController.text,
+      'name': _unitNameController.text,
       'rent_price': double.tryParse(_rentPriceController.text) ?? 0.0,
       'tax_rate': double.tryParse(_taxRateController.text) ?? 0.0,
       'notes': _notesController.text,

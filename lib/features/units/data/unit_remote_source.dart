@@ -23,8 +23,12 @@ class UnitRemoteSourceImpl extends UnitRemoteSource {
 
   @override
   Future<Unit> fetchUnitById(String id) async {
-    // Implement API call to fetch a unit by ID
-    throw UnimplementedError();
+    final response = await supabaseClient
+        .from(_tableName)
+        .select()
+        .eq('id', id)
+        .single();
+    return Unit.fromMap(response);
   }
 
   @override
@@ -35,11 +39,13 @@ class UnitRemoteSourceImpl extends UnitRemoteSource {
 
   @override
   Future<void> updateUnit(String id, Map<String, dynamic> data) async {
-    // Implement API call to update an existing unit
+    await supabaseClient.from(_tableName).update(data).eq('id', id);
+    return;
   }
 
   @override
   Future<void> deleteUnit(String id) async {
-    // Implement API call to delete a unit
+    await supabaseClient.from(_tableName).delete().eq('id', id);
+    return;
   }
 }

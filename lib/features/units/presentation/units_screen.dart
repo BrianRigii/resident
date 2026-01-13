@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:resident/core/theme/app_colors.dart';
 import 'package:resident/core/theme/app_text_styles.dart';
 import 'package:resident/core/widgets/common_widgets.dart';
+import 'package:resident/features/units/notifiers/unit_notifier.dart';
 import 'package:resident/features/units/presentation/add_unit_form.dart';
 
-class UnitsScreen extends StatelessWidget {
+class UnitsScreen extends StatefulWidget {
   static const path = '/units';
   const UnitsScreen({super.key});
 
+  @override
+  State<UnitsScreen> createState() => _UnitsScreenState();
+}
+
+class _UnitsScreenState extends State<UnitsScreen> {
   void _onAddUnit(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -20,8 +27,8 @@ class UnitsScreen extends StatelessWidget {
     );
   }
 
-  void _handleSubmitUnit(Map<String, dynamic> formData) {
-    // Handle unit submission logic here
+  void _handleSubmitUnit(Map<String, dynamic> formData) async {
+    await context.read<UnitNotifier>().addUnit(formData);
   }
 
   @override

@@ -12,6 +12,8 @@ import 'package:resident/features/auth/sources/auth_local_source.dart';
 import 'package:resident/features/properties/presentation/property_notifier.dart';
 
 import 'package:resident/features/properties/property_service.dart';
+import 'package:resident/features/units/domain/unit_service.dart';
+import 'package:resident/features/units/notifiers/unit_notifier.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,6 +38,10 @@ class MyApp extends StatelessWidget {
           create: (context) => PropertyNotifier(
             propertyService: getIt.getAsync<PropertyService>(),
           ),
+        ),
+        ChangeNotifierProvider<UnitNotifier>(
+          create: (context) =>
+              UnitNotifier(unitService: getIt.get<UnitService>()),
         ),
       ],
       child: MaterialApp.router(
