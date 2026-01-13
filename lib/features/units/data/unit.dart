@@ -5,12 +5,14 @@ class Unit {
   final double rentPrice;
   final double? taxRate;
   final String? notes;
+  final String? tenantId;
 
   Unit({
     required this.id,
     required this.name,
     required this.rentPrice,
     required this.propertyId,
+    this.tenantId,
     this.taxRate,
     this.notes,
   });
