@@ -29,26 +29,41 @@ class PropertyLocalSourceImpl extends PropertyLocalSource {
 
   @override
   Future<void> deleteProperty(String id) {
-    // TODO: implement deleteProperty
-    throw UnimplementedError();
+    return propertyBox.delete(id);
   }
 
   @override
-  Future<List<Property>> fetchProperties() {
-    // TODO: implement fetchProperties
-    throw UnimplementedError();
+  Future<List<Property>> fetchProperties() async {
+    return propertyBox.values.toList(growable: false);
   }
 
   @override
-  Future<Property> fetchPropertyById(String id) {
-    // TODO: implement fetchPropertyById
-    throw UnimplementedError();
+  Future<Property> fetchPropertyById(String id) async {
+    final property = propertyBox.get(id);
+    if (property == null) {
+      throw StateError('Property with id $id not found in local cache');
+    }
+    return property;
   }
 
   @override
-  Future<void> updateProperty(String id, Map<String, dynamic> data) {
-    // TODO: implement updateProperty
-    throw UnimplementedError();
+  Future<void> updateProperty(String id, Map<String, dynamic> data) async {
+    final existing = propertyBox.get(id);
+    if (existing == null) {
+      throw StateError('Cannot update missing property with id $id');
+    }
+
+    final updated = Property(
+      id: existing.id,
+      name: (data['name'] ?? existing.name) as String,
+      address: (data['address'] ?? existing.address) as String,
+      landLordId:
+          (data['landlord_id'] ?? data['landLordId'] ?? existing.landLordId)
+              as List<String>,
+      isActive: (data['isActive'] ?? existing.isActive) as bool,
+    );
+
+    await propertyBox.put(id, updated);
   }
 
   @override

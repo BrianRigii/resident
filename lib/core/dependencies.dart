@@ -15,11 +15,15 @@ import 'package:resident/features/properties/domain/property_service.dart';
 import 'package:resident/features/units/data/unit_remote_source.dart';
 import 'package:resident/features/units/domain/unit_service.dart';
 import 'package:resident/hive/hive_registrar.g.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final GetIt getIt = GetIt.instance;
 
 Future<void> setupDependencies() async {
   getIt.registerSingletonAsync<SupabaseService>(() => SupabaseService.create());
+  getIt.registerSingletonAsync<SharedPreferences>(
+    () => SharedPreferences.getInstance(),
+  );
   await _setupHive();
 
   getIt.registerLazySingleton<AuthService>(
@@ -45,6 +49,7 @@ Future<void> setupDependencies() async {
     return PropertyServiceImpl(
       getIt.get<PropertyRemoteSource>(),
       getIt.get<PropertyLocalSource>(),
+      getIt.get<SharedPreferences>(),
     );
   });
 

@@ -1,30 +1,46 @@
+import 'package:resident/core/utils/entity_key.dart';
+import 'package:resident/core/utils/fetch_strategy.dart';
 import 'package:resident/features/properties/models/property.dart';
 import 'package:resident/features/properties/sources/property_local_source.dart';
 import 'package:resident/features/properties/sources/property_remote_source.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+const EntityKey propertiesKey = EntityKey('properties');
 
 abstract class PropertyService {
-  Future<List<Property>> getProperties();
+  Future<List<Property>> getProperties({
+    bool forceRefresh = false,
+    bool userInitiated = false,
+  });
   Future<Property> getPropertyById(String id);
   Future<void> addProperty(Map<String, dynamic> data);
   Future<void> editProperty(String id, Map<String, dynamic> data);
   Future<void> removeProperty(String id);
+  Future<void> invalidateCache();
 }
 
-class PropertyServiceImpl extends PropertyService {
+class PropertyServiceImpl extends FetchStrategy<Property>
+    implements PropertyService {
   final PropertyRemoteSource propertyRemoteSource;
   final PropertyLocalSource propertyLocalSource;
-  PropertyServiceImpl(this.propertyRemoteSource, this.propertyLocalSource);
+  final SharedPreferences prefs;
+
+  PropertyServiceImpl(
+    this.propertyRemoteSource,
+    this.propertyLocalSource,
+    this.prefs,
+  ) : super(
+        entityKey: propertiesKey,
+        prefs: prefs,
+        cacheConfig: CacheConfig.moderate,
+      );
 
   @override
-  Future<List<Property>> getProperties() async {
-    try {
-      List<Property> properties = await propertyRemoteSource.fetchProperties();
-      await propertyLocalSource.clearProperties();
-
-      return properties;
-    } catch (e) {
-      rethrow;
-    }
+  Future<List<Property>> getProperties({
+    bool forceRefresh = false,
+    bool userInitiated = false,
+  }) async {
+    return getAll(forceRefresh: forceRefresh, userInitiated: userInitiated);
   }
 
   @override
@@ -35,16 +51,37 @@ class PropertyServiceImpl extends PropertyService {
   @override
   Future<void> addProperty(Map<String, dynamic> data) async {
     await propertyLocalSource.createProperty(data);
-    propertyRemoteSource.createProperty(data);
+    await propertyRemoteSource.createProperty(data);
   }
 
   @override
   Future<void> editProperty(String id, Map<String, dynamic> data) async {
     await propertyRemoteSource.updateProperty(id, data);
+    await propertyLocalSource.updateProperty(id, data);
   }
 
   @override
   Future<void> removeProperty(String id) async {
     await propertyRemoteSource.deleteProperty(id);
+    await propertyLocalSource.deleteProperty(id);
+  }
+
+  @override
+  Future<void> invalidateCache() async {
+    await super.invalidateCache();
+  }
+
+  @override
+  Future<List<Property>> fetchFromLocal() =>
+      propertyLocalSource.fetchProperties();
+
+  @override
+  Future<List<Property>> fetchFromRemote() =>
+      propertyRemoteSource.fetchProperties();
+
+  @override
+  Future<void> updateLocalCache(List<Property> items) async {
+    await propertyLocalSource.clearProperties();
+    await propertyLocalSource.cacheProperties(items);
   }
 }
