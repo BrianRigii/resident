@@ -7,7 +7,6 @@ import 'package:resident/core/router.dart';
 import 'package:resident/core/theme/app_theme.dart';
 import 'package:resident/features/auth/presentation/auth_notifier.dart';
 
-
 import 'package:resident/features/auth/domain/auth_service.dart';
 
 import 'package:resident/features/properties/presentation/property_notifier.dart';
@@ -34,9 +33,8 @@ class MyApp extends StatelessWidget {
               AuthNotifier(authService: getIt.get<AuthService>()),
         ),
         ChangeNotifierProvider<PropertyNotifier>(
-          create: (context) => PropertyNotifier(
-            propertyService: getIt.getAsync<PropertyService>(),
-          ),
+          create: (context) =>
+              PropertyNotifier(propertyService: getIt.get<PropertyService>()),
         ),
         ChangeNotifierProvider<UnitNotifier>(
           create: (context) =>

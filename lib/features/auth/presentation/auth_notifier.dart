@@ -18,13 +18,28 @@ class AuthNotifier extends ChangeNotifier {
 
   User? currentUser;
 
-  Future signIn(Map<String, dynamic> data) async {
+  Future<User?> signIn(Map<String, dynamic> data) async {
     isAuthenticating = true;
     try {
       User user = await authService.signIn(data);
       currentUser = user;
       isAuthenticating = false;
       notifyListeners();
+      return user;
+    } catch (e) {
+      isAuthenticating = false;
+      rethrow;
+    }
+  }
+
+  Future<User?> signUp(Map<String, dynamic> data) async {
+    isAuthenticating = true;
+    try {
+      User user = await authService.signUp(data);
+      currentUser = user;
+      isAuthenticating = false;
+      notifyListeners();
+      return user;
     } catch (e) {
       isAuthenticating = false;
       rethrow;

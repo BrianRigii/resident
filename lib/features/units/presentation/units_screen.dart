@@ -18,12 +18,7 @@ class _UnitsScreenState extends State<UnitsScreen> {
   void _onAddUnit(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (context) => DraggableScrollableSheet(
-        builder: (context, scrollController) => SingleChildScrollView(
-          controller: scrollController,
-          child: AddUnitForm(onSubmit: _handleSubmitUnit),
-        ),
-      ),
+      builder: (context) => AddUnitForm(onSubmit: _handleSubmitUnit),
     );
   }
 

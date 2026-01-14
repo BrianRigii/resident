@@ -5,7 +5,7 @@ import 'package:resident/features/properties/models/property.dart';
 import 'package:resident/features/properties/domain/property_service.dart';
 
 class PropertyNotifier extends ChangeNotifier {
-  final Future<PropertyService> propertyService;
+  final PropertyService propertyService;
   bool _isAddingProperty = false;
 
   PropertyNotifier({required this.propertyService});
@@ -20,14 +20,12 @@ class PropertyNotifier extends ChangeNotifier {
   List<Property> properties = [];
 
   void addProperty(Map<String, dynamic> data) async {
-    PropertyService service = await propertyService;
-    await service.addProperty(data);
+    await propertyService.addProperty(data);
     notifyListeners();
   }
 
   Future fetchProperties() async {
-    PropertyService service = await propertyService;
-    properties.addAll(await service.getProperties());
+    properties.addAll(await propertyService.getProperties());
     notifyListeners();
   }
 

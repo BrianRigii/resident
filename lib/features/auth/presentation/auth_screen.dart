@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:resident/core/theme/app_colors.dart';
 import 'package:resident/core/theme/app_spacing.dart';
 import 'package:resident/core/theme/app_text_styles.dart';
-import 'package:resident/features/auth/domain/auth_service.dart';
 import 'package:resident/features/auth/models/user.dart';
 import 'package:resident/features/auth/presentation/auth_form.dart';
+import 'package:resident/features/auth/presentation/auth_notifier.dart';
 
 import 'package:resident/splash_screen.dart';
 
@@ -29,11 +29,12 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   void _handleAuthSubmission(Map<String, dynamic> formData) async {
-    AuthService authService = context.read<AuthService>();
+    AuthNotifier authNotifier = context.read<AuthNotifier>();
 
-    User user = authMode == AuthMode.signIn
-        ? await authService.signIn(formData)
-        : await authService.signUp(formData);
+    User? user = (authMode == AuthMode.signIn
+        ? await authNotifier.signIn(formData)
+        : await authNotifier.signUp(formData));
+    if (user == null) return;
     if (mounted && user.id.isNotEmpty) context.go(SplashScreen.path);
   }
 

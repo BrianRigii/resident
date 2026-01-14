@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 
 import 'package:resident/core/supabase/supabase.dart';
+import 'package:resident/features/auth/domain/auth_service.dart';
 
 import 'package:resident/features/auth/models/user.dart';
 import 'package:resident/features/auth/sources/auth_local_source.dart';
@@ -17,39 +18,46 @@ final GetIt getIt = GetIt.instance;
 
 Future<void> setupDependencies() async {
   getIt.registerSingletonAsync<SupabaseService>(() => SupabaseService.create());
+  await _setupHive();
 
+  getIt.registerLazySingleton<AuthService>(
+    () => AuthServiceImpl(
+      getIt.get<AuthRemoteSource>(),
+      getIt.get<AuthLocalSource>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<AuthLocalSource>(() {
+    return AuthLocalSourceImpl(getIt.get<Box<User>>());
+  });
+
+  getIt.registerLazySingleton<AuthRemoteSource>(() {
+    return AuthRemoteSourceImpl(getIt.get<SupabaseService>().client);
+  });
+
+  getIt.registerLazySingleton<PropertyRemoteSource>(() {
+    return PropertyRemoteSourceImpl(getIt.get<SupabaseService>().client);
+  });
+
+  getIt.registerLazySingleton<PropertyService>(() {
+    return PropertyServiceImpl(getIt.get<PropertyRemoteSource>());
+  });
+
+  getIt.registerLazySingleton<UnitRemoteSource>(() {
+    return UnitRemoteSourceImpl(getIt.get<SupabaseService>().client);
+  });
+
+  getIt.registerLazySingleton<UnitService>(() {
+    return UnitServiceImpl(getIt.get<UnitRemoteSource>());
+  });
+
+  await getIt.allReady();
+}
+
+Future<void> _setupHive() async {
   await Hive.initFlutter();
 
   Hive.registerAdapters();
 
   getIt.registerSingletonAsync<Box<User>>(() => Hive.openBox<User>('user_box'));
-
-  getIt.registerSingletonAsync<AuthLocalSource>(() async {
-    final box = await getIt.getAsync<Box<User>>();
-    return AuthLocalSourceImpl(box);
-  });
-  getIt.registerSingletonAsync<AuthRemoteSource>(() async {
-    final supabase = await getIt.getAsync<SupabaseService>();
-    return AuthRemoteSourceImpl(supabase.client);
-  });
-
-  getIt.registerLazySingletonAsync<PropertyRemoteSource>(() async {
-    final supabase = await getIt.getAsync<SupabaseService>();
-    return PropertyRemoteSourceImpl(supabase.client);
-  });
-
-  getIt.registerLazySingletonAsync<PropertyService>(() async {
-    return PropertyServiceImpl(await getIt.getAsync<PropertyRemoteSource>());
-  });
-
-  getIt.registerSingletonAsync<UnitRemoteSource>(() async {
-    final supabase = await getIt.getAsync<SupabaseService>();
-    return UnitRemoteSourceImpl(supabase.client);
-  });
-
-  getIt.registerSingletonAsync<UnitService>(() async {
-    return UnitServiceImpl(await getIt.getAsync<UnitRemoteSource>());
-  });
-
-  await getIt.allReady();
 }
