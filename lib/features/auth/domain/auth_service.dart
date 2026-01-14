@@ -6,6 +6,7 @@ abstract class AuthService {
   Future<User> signIn(Map<String, dynamic> data);
   Future<User> signUp(Map<String, dynamic> data);
   void logOut();
+  User? getCachedUser();
 }
 
 class AuthServiceImpl extends AuthService {
@@ -29,6 +30,11 @@ class AuthServiceImpl extends AuthService {
   @override
   void logOut() {
     authLocalSource.clearCache();
+  }
+
+  @override
+  User? getCachedUser() {
+    return authLocalSource.getCachedUser();
   }
 
   @override

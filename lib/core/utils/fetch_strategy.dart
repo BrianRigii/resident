@@ -53,26 +53,6 @@ class CacheConfig {
   );
 }
 
-class KeepAliveConfig {
-  /// How long to keep the provider alive before auto-disposing
-  final Duration keepAliveThreshold;
-
-  /// Creates a new keep-alive configuration
-  const KeepAliveConfig({this.keepAliveThreshold = const Duration(minutes: 5)});
-
-  static const KeepAliveConfig stable = KeepAliveConfig(
-    keepAliveThreshold: Duration(minutes: 5),
-  );
-
-  static const KeepAliveConfig realTime = KeepAliveConfig(
-    keepAliveThreshold: Duration(seconds: 30),
-  );
-
-  static const KeepAliveConfig moderate = KeepAliveConfig(
-    keepAliveThreshold: Duration(minutes: 15),
-  );
-}
-
 /// A generic caching strategy class for handling local and remote data sources.
 /// Implemented by repositories to manage data freshness, caching, and sync.
 abstract class FetchStrategy<T> {

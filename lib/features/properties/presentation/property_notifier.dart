@@ -29,11 +29,7 @@ class PropertyNotifier extends ChangeNotifier {
     try {
       await propertyService.addProperty(data);
       await propertyService.invalidateCache();
-      await fetchProperties(
-        forceRefresh: true,
-        userInitiated: true,
-        replace: true,
-      );
+      await fetchProperties(forceRefresh: true, userInitiated: true);
     } catch (e) {
       _error = e.toString();
     } finally {
@@ -44,7 +40,6 @@ class PropertyNotifier extends ChangeNotifier {
   Future<void> fetchProperties({
     bool forceRefresh = false,
     bool userInitiated = false,
-    bool replace = true,
   }) async {
     _isLoading = true;
     _error = null;
@@ -55,11 +50,7 @@ class PropertyNotifier extends ChangeNotifier {
         forceRefresh: forceRefresh,
         userInitiated: userInitiated,
       );
-      if (replace) {
-        properties = items;
-      } else {
-        properties.addAll(items);
-      }
+      properties = items;
     } catch (e) {
       _error = e.toString();
     } finally {

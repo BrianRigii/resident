@@ -32,7 +32,7 @@ class PropertyServiceImpl extends FetchStrategy<Property>
   ) : super(
         entityKey: propertiesKey,
         prefs: prefs,
-        cacheConfig: CacheConfig.moderate,
+        cacheConfig: CacheConfig.realTime,
       );
 
   @override

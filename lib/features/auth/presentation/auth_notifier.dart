@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:resident/features/auth/models/user.dart';
 
@@ -7,7 +9,10 @@ class AuthNotifier extends ChangeNotifier {
   final AuthService authService;
   bool _isAuthenticating = false;
 
-  AuthNotifier({required this.authService});
+  AuthNotifier({required this.authService}) {
+    // Hydrate currentUser from local cache to survive hot reloads
+    currentUser = authService.getCachedUser();
+  }
 
   bool get isAuthenticating => _isAuthenticating;
 
@@ -54,5 +59,11 @@ class AuthNotifier extends ChangeNotifier {
       throw Exception('No authenticated user found');
     }
     return currentUser!;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    log('AuthNotifier disposed');
   }
 }

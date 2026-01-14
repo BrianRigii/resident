@@ -20,10 +20,7 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<PropertyNotifier>().fetchProperties(
-        userInitiated: true,
-        replace: true,
-      );
+      context.read<PropertyNotifier>().fetchProperties(userInitiated: true);
     });
   }
 
@@ -46,11 +43,7 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
   }
 
   Future<void> _refreshProperties() async {
-    await context.read<PropertyNotifier>().fetchProperties(
-      forceRefresh: true,
-      userInitiated: true,
-      replace: true,
-    );
+    await context.read<PropertyNotifier>().fetchProperties(userInitiated: true);
   }
 
   @override
