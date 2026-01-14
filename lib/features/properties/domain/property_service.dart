@@ -1,4 +1,5 @@
 import 'package:resident/features/properties/models/property.dart';
+import 'package:resident/features/properties/sources/property_local_source.dart';
 import 'package:resident/features/properties/sources/property_remote_source.dart';
 
 abstract class PropertyService {
@@ -11,12 +12,14 @@ abstract class PropertyService {
 
 class PropertyServiceImpl extends PropertyService {
   final PropertyRemoteSource propertyRemoteSource;
-  PropertyServiceImpl(this.propertyRemoteSource);
+  final PropertyLocalSource propertyLocalSource;
+  PropertyServiceImpl(this.propertyRemoteSource, this.propertyLocalSource);
 
   @override
   Future<List<Property>> getProperties() async {
     try {
       List<Property> properties = await propertyRemoteSource.fetchProperties();
+      await propertyLocalSource.clearProperties();
 
       return properties;
     } catch (e) {
@@ -31,7 +34,8 @@ class PropertyServiceImpl extends PropertyService {
 
   @override
   Future<void> addProperty(Map<String, dynamic> data) async {
-    await propertyRemoteSource.createProperty(data);
+    await propertyLocalSource.createProperty(data);
+    propertyRemoteSource.createProperty(data);
   }
 
   @override

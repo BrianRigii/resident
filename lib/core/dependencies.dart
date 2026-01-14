@@ -8,6 +8,8 @@ import 'package:resident/features/auth/sources/auth_local_source.dart';
 import 'package:resident/features/auth/sources/auth_remote_source.dart';
 
 import 'package:hive_ce_flutter/hive_flutter.dart';
+import 'package:resident/features/properties/models/property.dart';
+import 'package:resident/features/properties/sources/property_local_source.dart';
 import 'package:resident/features/properties/sources/property_remote_source.dart';
 import 'package:resident/features/properties/domain/property_service.dart';
 import 'package:resident/features/units/data/unit_remote_source.dart';
@@ -40,7 +42,14 @@ Future<void> setupDependencies() async {
   });
 
   getIt.registerLazySingleton<PropertyService>(() {
-    return PropertyServiceImpl(getIt.get<PropertyRemoteSource>());
+    return PropertyServiceImpl(
+      getIt.get<PropertyRemoteSource>(),
+      getIt.get<PropertyLocalSource>(),
+    );
+  });
+
+  getIt.registerLazySingleton<PropertyLocalSource>(() {
+    return PropertyLocalSourceImpl(getIt.get<Box<Property>>());
   });
 
   getIt.registerLazySingleton<UnitRemoteSource>(() {
@@ -60,4 +69,7 @@ Future<void> _setupHive() async {
   Hive.registerAdapters();
 
   getIt.registerSingletonAsync<Box<User>>(() => Hive.openBox<User>('user_box'));
+  getIt.registerSingletonAsync<Box<Property>>(
+    (() => Hive.openBox<Property>('property_box')),
+  );
 }

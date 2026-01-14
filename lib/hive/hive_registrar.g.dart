@@ -8,6 +8,8 @@ import 'package:resident/hive/hive_adapters.dart';
 extension HiveRegistrar on HiveInterface {
   void registerAdapters() {
     registerAdapter(PhoneNumberAdapter());
+    registerAdapter(PropertyAdapter());
+    registerAdapter(UnitAdapter());
     registerAdapter(UserAdapter());
   }
 }
@@ -15,6 +17,8 @@ extension HiveRegistrar on HiveInterface {
 extension IsolatedHiveRegistrar on IsolatedHiveInterface {
   void registerAdapters() {
     registerAdapter(PhoneNumberAdapter());
+    registerAdapter(PropertyAdapter());
+    registerAdapter(UnitAdapter());
     registerAdapter(UserAdapter());
   }
 }

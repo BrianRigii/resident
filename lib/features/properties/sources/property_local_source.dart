@@ -7,6 +7,8 @@ abstract class PropertyLocalSource {
   Future<Property> createProperty(Map<String, dynamic> data);
   Future<void> updateProperty(String id, Map<String, dynamic> data);
   Future<void> deleteProperty(String id);
+  Future<void> clearProperties();
+  Future<List<Property>> cacheProperties(List<Property> properties);
 }
 
 class PropertyLocalSourceImpl extends PropertyLocalSource {
@@ -47,5 +49,18 @@ class PropertyLocalSourceImpl extends PropertyLocalSource {
   Future<void> updateProperty(String id, Map<String, dynamic> data) {
     // TODO: implement updateProperty
     throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Property>> cacheProperties(List<Property> properties) async {
+    for (var property in properties) {
+      await propertyBox.put(property.id, property);
+    }
+    return properties;
+  }
+
+  @override
+  Future<void> clearProperties() async {
+    await propertyBox.clear();
   }
 }
