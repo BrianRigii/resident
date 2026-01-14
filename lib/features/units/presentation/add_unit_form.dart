@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:resident/core/utils/uuid.dart';
@@ -72,9 +70,6 @@ class _AddUnitFormState extends State<AddUnitForm> {
               selector: (context, propertyNotifier) =>
                   propertyNotifier.properties,
               builder: (context, properties, _) {
-                log(
-                  'Building property dropdown with ${properties.length} properties',
-                );
                 return DropdownButtonFormField<Property>(
                   decoration: const InputDecoration(labelText: 'Property'),
                   items: properties.map((property) {

@@ -38,20 +38,23 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        spacing: AppSpacing.xl,
-        children: [
-          TextFormField(
-            controller: _nameController,
-            decoration: const InputDecoration(labelText: 'Property Name'),
-          ),
-          ElevatedButton(
-            onPressed: _submitForm,
-            child: const Text('Add Property'),
-          ),
-        ],
+    return Padding(
+      padding: EdgeInsets.all(AppSpacing.lg),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          spacing: AppSpacing.xl,
+          children: [
+            TextFormField(
+              controller: _nameController,
+              decoration: const InputDecoration(labelText: 'Property Name'),
+            ),
+            ElevatedButton(
+              onPressed: _submitForm,
+              child: const Text('Add Property'),
+            ),
+          ],
+        ),
       ),
     );
   }

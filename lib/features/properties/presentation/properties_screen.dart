@@ -22,8 +22,8 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
       useRootNavigator: true,
 
       sheetAnimationStyle: AnimationStyle(
-        curve: Curves.easeInOut,
-        duration: const Duration(milliseconds: 300),
+        curve: Curves.bounceInOut,
+        duration: const Duration(seconds: 1),
       ),
       builder: (context) => AddPropertyForm(onSubmit: _handleSubmitProperty),
     );

@@ -2,7 +2,7 @@ class Property {
   final String id;
   final String name;
   final String address;
-  final List<String> landLordId;
+  List<String> landLordId;
   final bool isActive;
 
   Property({

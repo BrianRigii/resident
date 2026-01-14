@@ -18,7 +18,9 @@ class _UnitsScreenState extends State<UnitsScreen> {
   void _onAddUnit(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (context) => AddUnitForm(onSubmit: _handleSubmitUnit),
+      builder: (context) => SingleChildScrollView(
+        child: AddUnitForm(onSubmit: _handleSubmitUnit),
+      ),
     );
   }
 

@@ -10,13 +10,13 @@ abstract class PropertyService {
 }
 
 class PropertyServiceImpl extends PropertyService {
-  final PropertyRemoteSource propertApi;
-  PropertyServiceImpl(this.propertApi);
+  final PropertyRemoteSource propertyRemoteSource;
+  PropertyServiceImpl(this.propertyRemoteSource);
 
   @override
   Future<List<Property>> getProperties() async {
     try {
-      List<Property> properties = await propertApi.fetchProperties();
+      List<Property> properties = await propertyRemoteSource.fetchProperties();
 
       return properties;
     } catch (e) {
@@ -26,21 +26,21 @@ class PropertyServiceImpl extends PropertyService {
 
   @override
   Future<Property> getPropertyById(String id) async {
-    return await propertApi.fetchPropertyById(id);
+    return await propertyRemoteSource.fetchPropertyById(id);
   }
 
   @override
   Future<void> addProperty(Map<String, dynamic> data) async {
-    await propertApi.createProperty(data);
+    await propertyRemoteSource.createProperty(data);
   }
 
   @override
   Future<void> editProperty(String id, Map<String, dynamic> data) async {
-    await propertApi.updateProperty(id, data);
+    await propertyRemoteSource.updateProperty(id, data);
   }
 
   @override
   Future<void> removeProperty(String id) async {
-    await propertApi.deleteProperty(id);
+    await propertyRemoteSource.deleteProperty(id);
   }
 }
