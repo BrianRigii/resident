@@ -4,9 +4,6 @@ import 'package:resident/core/theme/app_colors.dart';
 import 'package:resident/core/theme/app_spacing.dart';
 import 'package:resident/core/theme/app_text_styles.dart';
 import 'package:resident/core/widgets/add_selection_widget.dart';
-import 'package:resident/core/widgets/buttons.dart';
-import 'package:resident/core/widgets/cards.dart';
-import 'package:resident/core/widgets/common_widgets.dart';
 
 class HomeScaffold extends StatelessWidget {
   static const String path = '/home';
