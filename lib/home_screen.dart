@@ -157,17 +157,17 @@ class _DashboardScreenState extends State<DashboardScreen>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // WhatsApp & SMS Integration Center
-                          _buildMessagingIntegrationCard(),
-                          SizedBox(height: AppSpacing.lg),
-
                           // Financial Summary
                           _buildFinancialSummarySection(),
                           SizedBox(height: AppSpacing.lg),
 
-                          // Quick Stats Grid
-                          _buildQuickStatsGrid(),
+                          // WhatsApp & SMS Integration Center
+                          _buildMessagingIntegrationCard(),
                           SizedBox(height: AppSpacing.lg),
+
+                          // Quick Stats Grid
+                          // _buildQuickStatsGrid(),
+                          // SizedBox(height: AppSpacing.lg),
 
                           // Properties & Occupancy
                           _buildPropertiesOccupancySection(),
@@ -194,7 +194,7 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   Widget _buildAppBar() {
     return SliverAppBar(
-      floating: false,
+      floating: true,
       pinned: false,
       expandedHeight: MediaQuery.sizeOf(context).height * 0.1,
       elevation: 0,
@@ -260,7 +260,7 @@ class _DashboardScreenState extends State<DashboardScreen>
           borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
           boxShadow: [
             BoxShadow(
-              color: AppColors.primary.withOpacity(0.3),
+              color: AppColors.primary.withAlpha((75)),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -274,7 +274,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                 Container(
                   padding: EdgeInsets.all(AppSpacing.sm),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withAlpha(50),
                     borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
                   ),
                   child: Icon(
@@ -307,7 +307,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                           Text(
                             'Connected',
                             style: AppTextStyles.caption.copyWith(
-                              color: Colors.white.withOpacity(0.9),
+                              color: Colors.white.withAlpha(230),
                             ),
                           ),
                         ],
@@ -328,7 +328,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                   child: MessagingActionButton(
                     icon: Icons.phone,
                     label: 'WhatsApp',
-                    count: '24',
+
                     onTap: () {},
                   ),
                 ),
@@ -337,7 +337,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                   child: MessagingActionButton(
                     icon: Icons.sms_rounded,
                     label: 'SMS',
-                    count: '12',
+
                     onTap: () {},
                   ),
                 ),
@@ -346,7 +346,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                   child: MessagingActionButton(
                     icon: Icons.campaign_rounded,
                     label: 'Broadcast',
-                    count: '',
+
                     onTap: () {},
                   ),
                 ),
@@ -379,12 +379,12 @@ class _DashboardScreenState extends State<DashboardScreen>
                 Container(
                   padding: EdgeInsets.all(AppSpacing.sm),
                   decoration: BoxDecoration(
-                    color: AppColors.success.withOpacity(0.1),
+                    color: Theme.of(context).colorScheme.primary.withAlpha(25),
                     borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
                   ),
                   child: Icon(
                     Icons.account_balance_wallet_rounded,
-                    color: AppColors.success,
+                    color: Theme.of(context).colorScheme.primary,
                     size: 20,
                   ),
                 ),
@@ -508,7 +508,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                 SizedBox(height: AppSpacing.xs),
                 AnimatedProgressBar(
                   progress: collectionRate / 100,
-                  color: AppColors.success,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ],
             ),

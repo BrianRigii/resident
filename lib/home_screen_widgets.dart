@@ -61,14 +61,14 @@ class _AnimatedCardState extends State<AnimatedCard>
 class MessagingActionButton extends StatelessWidget {
   final IconData icon;
   final String label;
-  final String count;
+
   final VoidCallback onTap;
 
   const MessagingActionButton({
     super.key,
     required this.icon,
     required this.label,
-    required this.count,
+
     required this.onTap,
   });
 
@@ -80,7 +80,7 @@ class MessagingActionButton extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(AppSpacing.sm),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.2),
+          color: Colors.white.withAlpha(50),
           borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
         ),
         child: Column(
@@ -95,24 +95,6 @@ class MessagingActionButton extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            if (count.isNotEmpty) ...[
-              SizedBox(height: 2),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
-                ),
-                child: Text(
-                  count,
-                  style: AppTextStyles.caption.copyWith(
-                    color: AppColors.primary,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
           ],
         ),
       ),
