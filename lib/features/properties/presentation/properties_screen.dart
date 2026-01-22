@@ -4,7 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:resident/core/theme/app_colors.dart';
 import 'package:resident/core/theme/app_text_styles.dart';
 import 'package:resident/core/widgets/common_widgets.dart';
+
 import 'package:resident/features/properties/presentation/add_property_form.dart';
+import 'package:resident/features/properties/presentation/property_card.dart';
 import 'package:resident/features/properties/presentation/property_notifier.dart';
 
 class PropertiesScreen extends StatefulWidget {
@@ -28,12 +30,15 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
     showModalBottomSheet(
       context: context,
       useRootNavigator: true,
-
+      isScrollControlled: true,
       sheetAnimationStyle: AnimationStyle(
         curve: Curves.bounceInOut,
         duration: const Duration(seconds: 1),
       ),
-      builder: (context) => AddPropertyForm(onSubmit: _handleSubmitProperty),
+      builder: (context) => SizedBox(
+        height: MediaQuery.of(context).size.height * 0.9,
+        child: AddPropertyForm(onSubmit: _handleSubmitProperty),
+      ),
     );
   }
 
@@ -81,22 +86,18 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
                 ),
               )
             else
-              SliverList.builder(
-                itemCount: notifier.properties.length,
-                itemBuilder: (context, index) {
-                  final property = notifier.properties[index];
-                  return ListTile(
-                    title: Text(property.name, style: AppTextStyles.body1),
-                    subtitle: Text(
-                      property.address,
-                      style: AppTextStyles.caption,
-                    ),
-                    leading: const Icon(
-                      Icons.home_work,
-                      color: AppColors.primary,
-                    ),
-                  );
-                },
+              SliverPadding(
+                padding: const EdgeInsets.all(16),
+                sliver: SliverList.builder(
+                  itemCount: notifier.properties.length,
+                  itemBuilder: (context, index) {
+                    final property = notifier.properties[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: PropertyCard(property: property),
+                    );
+                  },
+                ),
               ),
           ],
         ),
