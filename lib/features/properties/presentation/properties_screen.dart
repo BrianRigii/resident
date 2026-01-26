@@ -8,6 +8,7 @@ import 'package:resident/core/widgets/common_widgets.dart';
 import 'package:resident/features/properties/presentation/add_property_form.dart';
 import 'package:resident/features/properties/presentation/property_card.dart';
 import 'package:resident/features/properties/presentation/property_notifier.dart';
+import 'package:resident/features/properties/presentation/property_state.dart';
 
 class PropertiesScreen extends StatefulWidget {
   static const path = '/properties';
@@ -70,12 +71,13 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
               elevation: 0,
               title: Text('Properties', style: AppTextStyles.h4),
             ),
-            if (notifier.isLoading)
+            if (notifier.state is PropertyStateLoading)
               const SliverFillRemaining(
                 hasScrollBody: false,
                 child: Center(child: CircularProgressIndicator()),
               )
-            else if (notifier.properties.isEmpty)
+            else if (notifier.state is PropertyFetchedSuccess &&
+                (notifier.state as PropertyFetchedSuccess).properties.isEmpty)
               SliverFillRemaining(
                 hasScrollBody: false,
                 child: EmptyState(
@@ -89,9 +91,12 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
               SliverPadding(
                 padding: const EdgeInsets.all(16),
                 sliver: SliverList.builder(
-                  itemCount: notifier.properties.length,
+                  itemCount: (notifier.state as PropertyFetchedSuccess)
+                      .properties
+                      .length,
                   itemBuilder: (context, index) {
-                    final property = notifier.properties[index];
+                    final property = (notifier.state as PropertyFetchedSuccess)
+                        .properties[index];
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 12),
                       child: PropertyCard(property: property),

@@ -27,24 +27,7 @@ class AnalyticsSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.all(AppSpacing.sm),
-                  decoration: BoxDecoration(
-                    color: AppColors.secondary.withAlpha(25),
-                    borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
-                  ),
-                  child: Icon(
-                    Icons.analytics_rounded,
-                    color: AppColors.secondary,
-                    size: 20,
-                  ),
-                ),
-                SizedBox(width: AppSpacing.sm),
-                Text('Analytics', style: AppTextStyles.h6),
-              ],
-            ),
+            Row(children: [Text('Analytics', style: AppTextStyles.h6)]),
             SizedBox(height: AppSpacing.md),
 
             // Collection Trend Chart
@@ -60,7 +43,7 @@ class AnalyticsSection extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.all(AppSpacing.md),
                     decoration: BoxDecoration(
-                      color: AppColors.info.withOpacity(0.1),
+                      color: AppColors.info.withAlpha(25),
                       borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
                     ),
                     child: Column(

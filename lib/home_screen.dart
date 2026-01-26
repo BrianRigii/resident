@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:resident/core/theme/app_colors.dart';
 import 'package:resident/core/theme/app_spacing.dart';
 import 'package:resident/core/theme/app_text_styles.dart';
+import 'package:resident/core/utils/toasts.dart';
 import 'package:resident/core/widgets/add_selection_widget.dart';
 import 'package:resident/core/widgets/analytics_section.dart';
 import 'package:resident/core/widgets/financial_summary_section.dart';
 import 'package:resident/core/widgets/loading_screen.dart';
 import 'package:resident/core/widgets/messaging_interaction_card.dart';
+import 'package:resident/features/auth/presentation/auth_notifier.dart';
+import 'package:resident/features/properties/presentation/property_notifier.dart';
+import 'package:resident/features/properties/presentation/property_state.dart';
 
 import 'package:resident/home_screen_widgets.dart';
 
@@ -87,7 +92,11 @@ class _DashboardScreenState extends State<DashboardScreen>
   void _onAddActionPressed() {
     showModalBottomSheet(
       useRootNavigator: true,
+      showDragHandle: true,
+      isScrollControlled: true,
+      useSafeArea: true,
       context: context,
+
       builder: (_) {
         return const AddSelectionWidget();
       },
@@ -119,7 +128,7 @@ class _DashboardScreenState extends State<DashboardScreen>
         child: FloatingActionButton(
           onPressed: _onAddActionPressed,
           backgroundColor: Colors.transparent,
-          elevation: 0,
+
           child: const Icon(Icons.add, size: 28),
         ),
       ),
@@ -134,6 +143,18 @@ class _DashboardScreenState extends State<DashboardScreen>
               expandedHeight: MediaQuery.sizeOf(context).height * 0.2,
               elevation: 0,
               backgroundColor: Colors.transparent,
+              actions: [
+                IconButton.outlined(
+                  icon: const Icon(
+                    Icons.notifications_outlined,
+                    color: AppColors.textPrimary,
+                  ),
+                  onPressed: () {
+                    context.push('/settings');
+                  },
+                ),
+                const SizedBox(width: AppSpacing.md),
+              ],
               flexibleSpace: FlexibleSpaceBar(
                 background: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,36 +162,23 @@ class _DashboardScreenState extends State<DashboardScreen>
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(AppSpacing.md),
-                      child: Row(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Resident',
-                                  style: AppTextStyles.h3.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.textPrimary,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Welcome back, Alex! 👋',
-                                  style: AppTextStyles.body2.copyWith(
-                                    color: AppColors.textSecondary,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          IconButton.outlined(
-                            icon: const Icon(
-                              Icons.notifications_outlined,
+                          Text(
+                            'Resident',
+                            style: AppTextStyles.h3.copyWith(
+                              fontWeight: FontWeight.bold,
                               color: AppColors.textPrimary,
                             ),
-                            onPressed: () {},
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Welcome back, ${context.read<AuthNotifier>().currentUser?.name ?? ""}! 👋',
+                            style: AppTextStyles.body2.copyWith(
+                              color: AppColors.textSecondary,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ],
                       ),

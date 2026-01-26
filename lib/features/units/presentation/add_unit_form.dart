@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:resident/core/utils/uuid.dart';
 import 'package:resident/features/properties/models/property.dart';
 import 'package:resident/features/properties/presentation/property_notifier.dart';
+import 'package:resident/features/properties/presentation/property_state.dart';
 
 class AddUnitForm extends StatefulWidget {
   final Function(Map<String, dynamic>) onSubmit;
@@ -68,7 +69,10 @@ class _AddUnitFormState extends State<AddUnitForm> {
 
             Selector<PropertyNotifier, List<Property>>(
               selector: (context, propertyNotifier) =>
-                  propertyNotifier.properties,
+                  propertyNotifier.state is PropertyFetchedSuccess
+                  ? (propertyNotifier.state as PropertyFetchedSuccess)
+                        .properties
+                  : [],
               builder: (context, properties, _) {
                 return DropdownButtonFormField<Property>(
                   decoration: const InputDecoration(labelText: 'Property'),

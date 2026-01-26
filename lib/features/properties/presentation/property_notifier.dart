@@ -1,48 +1,43 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:resident/features/properties/models/property.dart';
+
 import 'package:resident/features/properties/domain/property_service.dart';
+import 'package:resident/features/properties/presentation/property_state.dart';
 
 class PropertyNotifier extends ChangeNotifier {
   final PropertyService propertyService;
-  bool _isAddingProperty = false;
-  bool _isLoading = false;
-  String? _error;
 
-  PropertyNotifier({required this.propertyService});
+  PropertyState _state = PropertyStateIdle();
+  PropertyState get state => _state;
 
-  bool get isAddingProperty => _isAddingProperty;
-  bool get isLoading => _isLoading;
-  String? get error => _error;
-
-  set isAddingProperty(bool val) {
-    _isAddingProperty = val;
+  set state(PropertyState val) {
+    _state = val;
     notifyListeners();
   }
 
-  List<Property> properties = [];
+  PropertyNotifier({required this.propertyService});
 
   Future<void> addProperty(Map<String, dynamic> data) async {
-    isAddingProperty = true;
-    _error = null;
     try {
+      state = PropertyStateLoading();
       await propertyService.addProperty(data);
       await propertyService.invalidateCache();
-      await fetchProperties(forceRefresh: true, userInitiated: true);
     } catch (e) {
-      _error = e.toString();
-    } finally {
-      isAddingProperty = false;
+      state = PropertyStateError(e.toString());
     }
+  }
+
+  void resetPropertyState() {
+    state = PropertyStateIdle();
+    notifyListeners();
   }
 
   Future<void> fetchProperties({
     bool forceRefresh = false,
     bool userInitiated = false,
   }) async {
-    _isLoading = true;
-    _error = null;
+    state = PropertyStateLoading();
     notifyListeners();
 
     try {
@@ -50,11 +45,11 @@ class PropertyNotifier extends ChangeNotifier {
         forceRefresh: forceRefresh,
         userInitiated: userInitiated,
       );
-      properties = items;
+
+      state = PropertyFetchedSuccess(items);
     } catch (e) {
-      _error = e.toString();
+      state = PropertyStateError(e.toString());
     } finally {
-      _isLoading = false;
       notifyListeners();
     }
   }

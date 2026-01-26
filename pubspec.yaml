@@ -43,6 +43,7 @@ dependencies:
   get_it: ^9.2.0
   uuid: ^4.5.2
   shared_preferences: ^2.5.4
+  toastification: ^3.0.3
 
 dev_dependencies:
   flutter_test:
