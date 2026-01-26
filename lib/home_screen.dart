@@ -4,15 +4,13 @@ import 'package:provider/provider.dart';
 import 'package:resident/core/theme/app_colors.dart';
 import 'package:resident/core/theme/app_spacing.dart';
 import 'package:resident/core/theme/app_text_styles.dart';
-import 'package:resident/core/utils/toasts.dart';
+
 import 'package:resident/core/widgets/add_selection_widget.dart';
 import 'package:resident/core/widgets/analytics_section.dart';
 import 'package:resident/core/widgets/financial_summary_section.dart';
 import 'package:resident/core/widgets/loading_screen.dart';
 import 'package:resident/core/widgets/messaging_interaction_card.dart';
 import 'package:resident/features/auth/presentation/auth_notifier.dart';
-import 'package:resident/features/properties/presentation/property_notifier.dart';
-import 'package:resident/features/properties/presentation/property_state.dart';
 
 import 'package:resident/home_screen_widgets.dart';
 

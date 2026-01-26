@@ -6,6 +6,7 @@ import 'package:resident/features/auth/presentation/auth_screen.dart';
 import 'package:resident/features/profile/presentation/profile_screen.dart';
 
 import 'package:resident/features/properties/presentation/properties_screen.dart';
+import 'package:resident/features/reports/presentation/reports_screen.dart';
 import 'package:resident/features/units/presentation/units_screen.dart';
 import 'package:resident/home_screen.dart';
 import 'package:resident/splash_screen.dart';
@@ -49,8 +50,8 @@ GoRouter router = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: UnitsScreen.path,
-              builder: (context, state) => const UnitsScreen(),
+              path: ReportsScreen.path,
+              builder: (context, state) => const ReportsScreen(),
             ),
           ],
         ),
@@ -63,6 +64,10 @@ GoRouter router = GoRouter(
           ],
         ),
       ],
+    ),
+    GoRoute(
+      path: UnitsScreen.path,
+      builder: (context, state) => const UnitsScreen(),
     ),
   ],
 );

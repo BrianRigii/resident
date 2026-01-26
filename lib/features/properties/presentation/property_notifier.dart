@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 import 'package:resident/features/properties/domain/property_service.dart';
+import 'package:resident/features/properties/models/property.dart';
 import 'package:resident/features/properties/presentation/property_state.dart';
 
 class PropertyNotifier extends ChangeNotifier {
@@ -15,6 +16,16 @@ class PropertyNotifier extends ChangeNotifier {
     _state = val;
     notifyListeners();
   }
+
+  bool _isGettingProperties = false;
+  bool get isGettingProperties => _isGettingProperties;
+
+  set isGettingProperties(bool val) {
+    _isGettingProperties = val;
+    notifyListeners();
+  }
+
+  List<Property> properties = [];
 
   PropertyNotifier({required this.propertyService});
 
@@ -37,7 +48,7 @@ class PropertyNotifier extends ChangeNotifier {
     bool forceRefresh = false,
     bool userInitiated = false,
   }) async {
-    state = PropertyStateLoading();
+    isGettingProperties = true;
     notifyListeners();
 
     try {
@@ -45,12 +56,11 @@ class PropertyNotifier extends ChangeNotifier {
         forceRefresh: forceRefresh,
         userInitiated: userInitiated,
       );
-
-      state = PropertyFetchedSuccess(items);
+      properties.clear();
+      properties = [...items];
     } catch (e) {
       state = PropertyStateError(e.toString());
-    } finally {
-      notifyListeners();
+      isGettingProperties = false;
     }
   }
 

@@ -15,8 +15,3 @@ class PropertyAddedSuccess extends PropertyState {
   final Property property;
   PropertyAddedSuccess(this.property);
 }
-
-class PropertyFetchedSuccess extends PropertyState {
-  final List<Property> properties;
-  PropertyFetchedSuccess(this.properties);
-}

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:resident/core/theme/app_colors.dart';
+import 'package:resident/core/theme/app_spacing.dart';
 import 'package:resident/core/theme/app_text_styles.dart';
-import 'package:resident/core/widgets/common_widgets.dart';
 
-import 'package:resident/features/properties/presentation/add_property_form.dart';
+import 'package:resident/features/properties/models/property.dart';
+
 import 'package:resident/features/properties/presentation/property_card.dart';
 import 'package:resident/features/properties/presentation/property_notifier.dart';
-import 'package:resident/features/properties/presentation/property_state.dart';
 
 class PropertiesScreen extends StatefulWidget {
   static const path = '/properties';
@@ -27,27 +27,6 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
     });
   }
 
-  void _onAddProperty(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      useRootNavigator: true,
-      isScrollControlled: true,
-      sheetAnimationStyle: AnimationStyle(
-        curve: Curves.bounceInOut,
-        duration: const Duration(seconds: 1),
-      ),
-      builder: (context) => SizedBox(
-        height: MediaQuery.of(context).size.height * 0.9,
-        child: AddPropertyForm(onSubmit: _handleSubmitProperty),
-      ),
-    );
-  }
-
-  void _handleSubmitProperty(Map<String, dynamic> formData) async {
-    PropertyNotifier propertyNotifier = context.read<PropertyNotifier>();
-    propertyNotifier.addProperty(formData);
-  }
-
   Future<void> _refreshProperties() async {
     await context.read<PropertyNotifier>().fetchProperties(userInitiated: true);
   }
@@ -57,10 +36,6 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
     final notifier = context.watch<PropertyNotifier>();
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _onAddProperty(context),
-        child: const Icon(Icons.add),
-      ),
       body: RefreshIndicator(
         onRefresh: _refreshProperties,
         child: CustomScrollView(
@@ -71,39 +46,18 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
               elevation: 0,
               title: Text('Properties', style: AppTextStyles.h4),
             ),
-            if (notifier.state is PropertyStateLoading)
-              const SliverFillRemaining(
-                hasScrollBody: false,
-                child: Center(child: CircularProgressIndicator()),
-              )
-            else if (notifier.state is PropertyFetchedSuccess &&
-                (notifier.state as PropertyFetchedSuccess).properties.isEmpty)
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: EmptyState(
-                  icon: Icons.apartment,
-                  title: 'No Properties Yet',
-                  description: 'Add your first property to get started',
-                  actionText: 'Add Property',
-                ),
-              )
-            else
-              SliverPadding(
-                padding: const EdgeInsets.all(16),
-                sliver: SliverList.builder(
-                  itemCount: (notifier.state as PropertyFetchedSuccess)
-                      .properties
-                      .length,
-                  itemBuilder: (context, index) {
-                    final property = (notifier.state as PropertyFetchedSuccess)
-                        .properties[index];
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: PropertyCard(property: property),
-                    );
-                  },
-                ),
+            SliverFillRemaining(
+              child: ListView.builder(
+                itemCount: notifier.properties.length,
+                itemBuilder: (context, index) {
+                  Property property = notifier.properties[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(AppSpacing.sm),
+                    child: PropertyCard(property: property),
+                  );
+                },
               ),
+            ),
           ],
         ),
       ),
