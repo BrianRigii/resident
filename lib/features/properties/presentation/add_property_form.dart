@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -9,6 +10,7 @@ import 'package:resident/core/utils/uuid.dart';
 import 'package:resident/core/widgets/buttons.dart';
 
 import 'package:resident/features/auth/presentation/auth_notifier.dart';
+import 'package:resident/features/units/presentation/add_unit_form.dart';
 
 class AddPropertyForm extends StatefulWidget {
   static const path = '/add-property-form';
@@ -390,7 +392,7 @@ class _AddPropertyFormState extends State<AddPropertyForm>
               height: 48,
               decoration: BoxDecoration(
                 color: selected
-                    ? AppColors.primary.withOpacity(0.1)
+                    ? AppColors.primary.withAlpha(25)
                     : AppColors.surfaceVariant,
                 borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
               ),
@@ -475,9 +477,9 @@ class _AddPropertyFormState extends State<AddPropertyForm>
           Container(
             padding: EdgeInsets.all(AppSpacing.md),
             decoration: BoxDecoration(
-              color: AppColors.info.withOpacity(0.1),
+              color: AppColors.info.withAlpha(25),
               borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-              border: Border.all(color: AppColors.info.withOpacity(0.2)),
+              border: Border.all(color: AppColors.info.withAlpha(51)),
             ),
             child: Row(
               children: [
@@ -516,9 +518,9 @@ class _AddPropertyFormState extends State<AddPropertyForm>
           Container(
             padding: EdgeInsets.all(AppSpacing.md),
             decoration: BoxDecoration(
-              color: AppColors.warning.withOpacity(0.1),
+              color: AppColors.warning.withAlpha(25),
               borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-              border: Border.all(color: AppColors.warning.withOpacity(0.2)),
+              border: Border.all(color: AppColors.warning.withAlpha(51)),
             ),
             child: Row(
               children: [
@@ -581,7 +583,7 @@ class _AddPropertyFormState extends State<AddPropertyForm>
             width: 64,
             height: 64,
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
+              color: AppColors.primary.withAlpha(25),
               shape: BoxShape.circle,
             ),
             child: Icon(Icons.apartment, size: 32, color: AppColors.primary),
@@ -616,7 +618,7 @@ class _AddPropertyFormState extends State<AddPropertyForm>
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
+              color: AppColors.primary.withAlpha(25),
               borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
             ),
             child: Icon(Icons.meeting_room, color: AppColors.primary, size: 20),
@@ -721,7 +723,7 @@ class _AddPropertyFormState extends State<AddPropertyForm>
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
+                  color: AppColors.primary.withAlpha(25),
                   borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
                 ),
                 child: Icon(icon, color: AppColors.primary, size: 20),
@@ -818,130 +820,16 @@ class _AddPropertyFormState extends State<AddPropertyForm>
   }
 
   void _showAddUnitDialog() {
-    final nameController = TextEditingController();
-    final rentController = TextEditingController();
-    final taxController = TextEditingController();
-    final notesController = TextEditingController();
-    final formKey = GlobalKey<FormState>();
-
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(AppSpacing.radiusLg),
-          ),
-        ),
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(AppSpacing.lg),
-          child: Form(
-            key: formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(
-                          AppSpacing.radiusSm,
-                        ),
-                      ),
-                      child: Icon(
-                        Icons.meeting_room,
-                        color: AppColors.primary,
-                        size: 20,
-                      ),
-                    ),
-                    SizedBox(width: AppSpacing.md),
-                    Text('Add Unit', style: AppTextStyles.h5),
-                    Spacer(),
-                    IconButton(
-                      icon: Icon(Icons.close),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ],
-                ),
-                SizedBox(height: AppSpacing.lg),
-                TextFormField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    labelText: 'Unit Name *',
-                    hintText: 'e.g., Apt 3B',
-                    prefixIcon: Icon(Icons.door_front_door),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Unit name is required';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: AppSpacing.md),
-                TextFormField(
-                  controller: rentController,
-                  decoration: InputDecoration(
-                    labelText: 'Monthly Rent',
-                    hintText: '0.00',
-                    prefixText: '\$ ',
-                    prefixIcon: Icon(Icons.attach_money),
-                  ),
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                ),
-                SizedBox(height: AppSpacing.md),
-                TextFormField(
-                  controller: taxController,
-                  decoration: InputDecoration(
-                    labelText: 'Tax Rate',
-                    hintText: '0.00',
-                    suffixText: '%',
-                    prefixIcon: Icon(Icons.percent),
-                  ),
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                ),
-                SizedBox(height: AppSpacing.md),
-                TextFormField(
-                  controller: notesController,
-                  decoration: InputDecoration(
-                    labelText: 'Notes',
-                    hintText: 'Additional information',
-                    prefixIcon: Icon(Icons.notes),
-                  ),
-                  maxLines: 2,
-                ),
-                SizedBox(height: AppSpacing.lg),
-                PrimaryButton(
-                  text: 'Add Unit',
-                  icon: Icons.add,
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      _addUnit({
-                        'id': getUUID,
-                        'name': nameController.text,
-                        'rent_price': double.tryParse(rentController.text),
-                        'tax_rate': double.tryParse(taxController.text),
-                        'notes': notesController.text,
-                      });
-                      Navigator.pop(context);
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+
+      builder: (context) => AddUnitForm(onSubmit: onUnitSubmit),
     );
+  }
+
+  void onUnitSubmit(Map<String, dynamic> unitData) {
+    _addUnit(unitData);
   }
 }
 
